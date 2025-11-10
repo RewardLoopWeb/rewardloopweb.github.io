@@ -1,2 +1,0 @@
-# RewardLoopWeb.github.io
-Giveaways

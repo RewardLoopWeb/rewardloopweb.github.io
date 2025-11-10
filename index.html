@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Giveaway Access</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 50px;
+      background: #f8f8f8;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      display: inline-block;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background: #3b82f6;
+      color: white;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: gray;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Access the Giveaway</h2>
+    <p>To continue, please accept to view sponsored content which helps fund the giveaway.</p>
+    <label>
+      <input type="checkbox" id="agreeCheckbox"> I agree to view sponsored content
+    </label><br><br>
+    <button id="continueBtn" disabled>Continue</button>
+  </div>
+
+  <script>
+    const checkbox = document.getElementById('agreeCheckbox');
+    const button = document.getElementById('continueBtn');
+
+    checkbox.addEventListener('change', () => {
+      button.disabled = !checkbox.checked;
+    });
+
+    button.addEventListener('click', () => {
+      // Redirect to your shortlink (e.g., ShrinkMe)
+      window.location.href = "https://shrinkme.io/yourlink";
+    });
+  </script>
+</body>
+</html>
