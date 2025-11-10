@@ -2,57 +2,147 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Giveaway Access</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RewardLoop | Honest Giveaways, Powered by You</title>
   <style>
     body {
-      font-family: sans-serif;
-      text-align: center;
-      padding: 50px;
-      background: #f8f8f8;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      background: #f5f7fa;
+      color: #333;
     }
-    .container {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      display: inline-block;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
+
+    header {
       background: #3b82f6;
       color: white;
-      cursor: pointer;
+      text-align: center;
+      padding: 2rem 1rem;
     }
-    button:disabled {
-      background: gray;
-      cursor: not-allowed;
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    header p {
+      margin-top: .5rem;
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    section {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .giveaway-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .giveaway-card {
+      background: white;
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .giveaway-card h3 {
+      margin: 0 0 .4rem;
+      color: #1e3a8a;
+    }
+
+    .giveaway-card p {
+      margin: 0.4rem 0 0.6rem;
+      font-size: 0.95rem;
+    }
+
+    .giveaway-card a {
+      background: #3b82f6;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .giveaway-card a:hover {
+      background: #2563eb;
+    }
+
+    h2 {
+      border-left: 5px solid #3b82f6;
+      padding-left: 0.5rem;
+      color: #1e3a8a;
+    }
+
+    .how-it-works {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .how-it-works ol {
+      line-height: 1.8;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.85rem;
+      color: #555;
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <h2>Access the Giveaway</h2>
-    <p>To continue, please accept to view sponsored content which helps fund the giveaway.</p>
-    <label>
-      <input type="checkbox" id="agreeCheckbox"> I agree to view sponsored content
-    </label><br><br>
-    <button id="continueBtn" disabled>Continue</button>
-  </div>
+  <header>
+    <h1>RewardLoop</h1>
+    <p>Honest Giveaways, Powered by You 💙</p>
+  </header>
 
-  <script>
-    const checkbox = document.getElementById('agreeCheckbox');
-    const button = document.getElementById('continueBtn');
+  <section id="active">
+    <h2>🎁 Active Giveaways</h2>
+    <div class="giveaway-list">
+      <div class="giveaway-card">
+        <h3>$1 Amazon Gift Card Giveaway</h3>
+        <p>Enter daily for a chance to win a genuine $1 Amazon gift card. No payment, no tricks — just transparency.</p>
+        <a href="YOUR_SHORTENED_URL_HERE" target="_blank">Enter Giveaway</a>
+      </div>
 
-    checkbox.addEventListener('change', () => {
-      button.disabled = !checkbox.checked;
-    });
+      <!-- Add more active giveaways here -->
+    </div>
+  </section>
 
-    button.addEventListener('click', () => {
-      // Redirect to your shortlink (e.g., ShrinkMe)
-      window.location.href = "https://shrinkme.io/yourlink";
-    });
-  </script>
+  <section id="ended">
+    <h2>🏆 Ended Giveaways & Winners</h2>
+    <div class="giveaway-list">
+      <div class="giveaway-card">
+        <h3>$1 Amazon Gift Card – October</h3>
+        <p><strong>Winner:</strong> Ananya S. (Proof Posted: <a href="#" target="_blank">View</a>)</p>
+      </div>
+      <!-- Add more past giveaways here -->
+    </div>
+  </section>
+
+  <section class="how-it-works">
+    <h2>🔄 How RewardLoop Works</h2>
+    <ol>
+      <li>Visit RewardLoop and explore our active giveaways.</li>
+      <li>Click “Enter Giveaway” — you’ll be redirected via a short sponsored link. That helps fund future prizes!</li>
+      <li>After redirection, simply register your entry on the giveaway page (usually hosted on Gleam).</li>
+      <li>At the end of each giveaway, we personally contact the winner via email and post proof publicly.</li>
+      <li>Every ad click fuels the next giveaway — the loop continues!</li>
+    </ol>
+    <p><strong>No payments, no catch.</strong> Every visit helps keep RewardLoop free and fair for everyone.</p>
+  </section>
+
+  <footer>
+    © 2025 RewardLoop – Community-Funded Giveaways. All rights reserved.
+  </footer>
 </body>
 </html>
