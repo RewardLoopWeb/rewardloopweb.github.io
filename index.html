@@ -4,10 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RewardLoop | Honest Giveaways, Powered by You</title>
-  <a class="e-widget no-button" id="gleam-giveaway" href="https://gleam.io/X86zU/the-first-loop-1-amazon-gift-card-giveaway" rel="nofollow">
-    The First Loop - 1$ Amazon Gift Card Giveaway
-  </a>
-  <script type="text/javascript" src="https://widget.gleamjs.io/e.js" async="true"></script>
+  <div id="gleam-area" class="gleam-area" style="display:block;">
+    <a class="e-widget no-button" id="gleam-giveaway" href="https://gleam.io/X86zU/the-first-loop-1-amazon-gift-card-giveaway" rel="nofollow">
+      The First Loop - 1$ Amazon Gift Card Giveaway
+    </a>
+    <script type="text/javascript" src="https://widget.gleamjs.io/e.js" async="true"></script>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const gleamGiveaway = document.getElementById("gleam-giveaway");
+  const warning = document.getElementById("widget-error");
+    setTimeout(() => {
+        const gleamWidget = Array.from(document.getElementsByClassName("e-embed-frame"))[0];
+        console.log(gleamWidget);
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                if (mutation.type === "attributes" && gleamWidget.style.height == "509px") warn();
+            }
+        });
+        observer.observe(gleamWidget, { attributes: true });
+    }, 500);
+  }
+
+  function warn() {
+    gleamArea.innerHTML = ``;
+    warning.style.display = "block";
+  }
+    }
+  </script>
+  <div id="widget-error" style="display:none; background:#ff4444; color:white; padding:10px; text-align:center; font-family:sans-serif;">
+  ⚠️ The giveaway widget couldn’t load. Please disable tracker-blocking extensions or allow cookies for this site.
+</div>
   <iframe 
   src="https://gleam.io/X86zU/the-first-loop-1-amazon-gift-card-giveaway" 
   width="100%" 
