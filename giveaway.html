@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RewardLoop — Giveaway</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="back-link">← Back</a>
+      <img src="assets/logo.png" alt="RewardLoop" class="logo" />
+      <div class="title-block">
+        <h1 id="giveaway-title">Giveaway</h1>
+        <p id="giveaway-sub" class="tagline"></p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="giveaway-wrap">
+      <img id="giveaway-image" class="giveaway-image" src="" alt="Prize image">
+      <p id="giveaway-desc" class="desc"></p>
+
+      <div id="sponsor-area" class="sponsor-area" style="display:none;">
+        <label class="checkbox-label">
+          <input type="checkbox" id="accept-sponsor"> I agree to view sponsored content that helps fund this giveaway (once every 24 hours).
+        </label>
+        <div class="sponsor-actions">
+          <button id="goto-ad" class="primary-btn" disabled>Open Sponsor Link</button>
+          <button id="continue-to-giveaway" class="primary-btn" disabled>Continue to Giveaway</button>
+        </div>
+        <p id="sponsor-note" class="note">After visiting the sponsor link your session will be unlocked for 24 hours.</p>
+      </div>
+
+      <div id="gleam-area" class="gleam-area" style="display:none;">
+        <div id="gleam-placeholder"></div>
+        <div id="gleam-error" class="error-box" style="display:none;">
+          ⚠️ The giveaway widget couldn’t load in this browser. Please allow cookies for <b>gleam.io</b> or disable any tracker blocker. On iPhone/iPad use Safari.
+        </div>
+      </div>
+
+      <div id="timer-area" style="display:none;">
+        <p id="timer-text"></p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2025 RewardLoop</p>
+  </footer>
+  <script src="js/data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/giveaway.js"></script>
+</body>
+</html>

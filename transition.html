@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RewardLoop — Sponsored Access</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="back-link">← Back</a>
+      <img src="assets/logo.png" alt="RewardLoop" class="logo" />
+      <div class="title-block">
+        <h1>Sponsored Access</h1>
+        <p class="tagline">Support the giveaways by viewing a short sponsored page — unlock access for 24 hours.</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="redirect-card">
+      <h2 id="t-title">Quick consent</h2>
+      <p id="t-desc">This giveaway is funded by sponsored links. By continuing you agree to view a short sponsored page which helps fund prizes.</p>
+
+      <label class="checkbox-label" style="display:block;margin-top:12px;">
+        <input type="checkbox" id="consentCheckbox"> I agree to view sponsored content which funds the giveaway.
+      </label>
+
+      <div style="margin-top:1rem;">
+        <button id="continueBtn" class="primary-btn" disabled>Continue to Sponsor</button>
+      </div>
+
+      <p style="margin-top:1rem; color:var(--muted); font-size:0.9rem;">
+        After viewing the sponsor page you will be returned to the giveaway page.
+      </p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2025 RewardLoop</p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/transition.js"></script>
+</body>
+</html>
