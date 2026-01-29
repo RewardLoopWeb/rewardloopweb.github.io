@@ -1,46 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RewardLoop | Honest Giveaways, Powered by You</title>
-  <p id="height-text" style="display:block;">Height: </p>
-  <div id="gleam-area" class="gleam-area" style="display:block;">
-    <a class="e-widget no-button" id="gleam-giveaway" href="https://gleam.io/X86zU/the-first-loop-1-amazon-gift-card-giveaway" rel="nofollow">
-      The First Loop - 1$ Amazon Gift Card Giveaway
-    </a>
-    <script type="text/javascript" src="https://widget.gleamjs.io/e.js" async="true"></script>
-  </div>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const heightText = document.getElementById("height-text");
-      const gleamArea = document.getElementById("gleam-area");
-      const gleamGiveaway = document.getElementById("gleam-giveaway");
-  const warning = document.getElementById("widget-error");
-    setTimeout(() => {
-        const gleamWidget = Array.from(document.getElementsByClassName("e-embed-frame"))[0];
-        console.log(gleamWidget);
-        const observer = new MutationObserver((mutations) => {
-            for (const mutation of mutations) {
-                if (mutation.type === "attributes" && gleamWidget.style.height == "509px") warn();
-              if (mutation.type === "attributes" && gleamWidget.style.height == "553px") warn();
-                if (mutation.type === "attributes") heightText.textContent = "Height: " + gleamWidget.style.height;
-            }
-        });
-        observer.observe(gleamWidget, { attributes: true });
-    }, 500);
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RewardLoop — Giveaways</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <img src="assets/logo.png" alt="RewardLoop" class="logo" />
+      <div class="title-block">
+        <h1>RewardLoop</h1>
+        <p class="tagline">Honest Giveaways — powered by the community</p>
+      </div>
+    </div>
+  </header>
 
-  function warn() {
-    gleamArea.innerHTML = ``;
-    warning.style.display = "block";
-  }
-    });
-  </script>
-  <div id="widget-error" style="display:none; background:#ff4444; color:white; padding:10px; text-align:center; font-family:sans-serif;">
-  ⚠️ The giveaway widget couldn’t load. Please disable tracker-blocking extensions or allow cookies for this site.
-</div>
-  <footer>
-    © 2025 RewardLoop – Community-Funded Giveaways. All rights reserved.
+  <main class="container">
+    <section class="section">
+      <h2>🎁 Active Giveaways</h2>
+      <div id="active-list" class="card-grid"></div>
+    </section>
+
+    <section class="section">
+      <h2>⏳ Upcoming Giveaways</h2>
+      <div id="upcoming-list" class="card-grid"></div>
+    </section>
+
+    <section class="section">
+      <h2>🏁 Ended Giveaways & Winners</h2>
+      <div id="ended-list" class="card-grid"></div>
+    </section>
+
+    <section class="section how-it-works">
+      <h2>🔄 How RewardLoop Works</h2>
+      <ol>
+        <li>Click a giveaway → you’ll confirm consent to view sponsored content.</li>
+        <li>After consenting you’ll be redirected to a short sponsor link (ads). That short link must redirect back to the giveaway page.</li>
+        <li>When you arrive at the giveaway page via the short link we start a 24-hour access window for that giveaway only.</li>
+        <li>During that 24-hour window you can revisit that giveaway freely; other giveaways require their own sponsor view.</li>
+      </ol>
+      <p class="muted">We do not charge users. We post winners publicly and contact winners by email.</p>
+
+      <div id="session-info" class="session-info">
+        <p id="session-text">Checking your session…</p>
+        <button id="reset-session" class="small-btn">Reset local session (testing)</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2025 RewardLoop • Transparent Giveaways Funded by You</p>
   </footer>
+
+  <!-- scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/utils.js" type="module"></script>
+  <script src="js/main.js" type="module"></script>
 </body>
 </html>
