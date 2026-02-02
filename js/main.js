@@ -50,7 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
       ...doc.data()
     });
   });
-  console.log("Giveaways: ", giveaways);
   return giveaways;
 }
   const activeList = document.getElementById("active-list");
@@ -65,7 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
     array = await loadActiveGiveaways();
     // Render active giveaways
     (array || []).forEach(g => {
-    console.log(g)
     const card = document.createElement("div");
     card.className = "giveaway-card";
     card.innerHTML = `
@@ -116,3 +114,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateSessionText();
 });
+
