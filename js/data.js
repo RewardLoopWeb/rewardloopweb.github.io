@@ -2,6 +2,7 @@
    - shortLinkB64 and gleamLinkB64 are Base64 encoded strings (basic obfuscation)
    - shortLink must redirect back to: giveaway.html?id=GIVEAWAY_ID&joined=1
 */
+// Deprecatedd (only for testing)
 
 const data = {
   active: [

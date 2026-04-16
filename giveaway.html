@@ -4,6 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>RewardLoop — Giveaway</title>
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://rewardloop.github.io/giveaway.html" />
+  <meta property="og:title"       content="RewardLoop — Enter the Giveaway" />
+  <meta property="og:description" content="Enter for free. Funded by a short sponsored link — no purchase, no signup required." />
+  <meta property="og:image"       content="https://rewardloop.github.io/assets/logo.png" />
+  <meta name="twitter:card"       content="summary" />
+  <meta name="description"        content="Enter for free. Funded by a short sponsored link — no purchase, no signup required." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,46 +25,71 @@
       <a href="index.html" class="back-link">← Back</a>
       <img src="assets/logo.png" alt="RewardLoop" class="logo" />
       <div class="title-block">
-        <h1 id="giveaway-title">Giveaway</h1>
+        <h1 id="giveaway-title">Loading…</h1>
         <p id="giveaway-sub" class="tagline"></p>
       </div>
     </div>
   </header>
 
   <main class="container">
-    <div class="giveaway-wrap">
-      <img id="giveaway-image" class="giveaway-image" src="" alt="Prize image">
-      <p id="giveaway-desc" class="desc"></p>
+    <div class="giveaway-wrap fade-up">
 
-      <div id="sponsor-area" class="sponsor-area" style="display:none;">
-        <label class="checkbox-label">
-          <input type="checkbox" id="accept-sponsor"> I agree to view sponsored content that helps fund this giveaway (once every 24 hours).
-        </label>
-        <div class="sponsor-actions">
-          <button id="goto-ad" class="primary-btn" disabled>Open Sponsor Link</button>
-          <button id="continue-to-giveaway" class="primary-btn" disabled>Continue to Giveaway</button>
+      <!-- Loading skeleton -->
+      <div id="loading-skeleton" class="giveaway-skeleton">
+        <div class="skel skel-image"></div>
+        <div class="skel skel-title"></div>
+        <div class="skel skel-text"></div>
+        <div class="skel skel-text skel-text-short"></div>
+        <div class="skel skel-btn"></div>
+      </div>
+
+      <!-- Real content -->
+      <div id="giveaway-content" style="display:none;">
+        <img id="giveaway-image" class="giveaway-image" src="" alt="Prize image" />
+        <p id="giveaway-desc" class="desc" style="text-align:center; margin-bottom:0.5rem;"></p>
+
+        <div id="sponsor-area" class="sponsor-area" style="display:none;">
+          <p class="sponsor-label">🔒 Sponsor Access Required</p>
+          <label class="checkbox-label">
+            <input type="checkbox" id="accept-sponsor" />
+            I agree to view sponsored content that helps fund this giveaway (once every 24 hours).
+          </label>
+          <div class="sponsor-actions">
+            <button id="goto-ad" class="primary-btn" disabled>Open Sponsor Link</button>
+            <button id="continue-to-giveaway" class="primary-btn" disabled>I've Returned — Continue</button>
+          </div>
+          <p class="note">After visiting the sponsor link your session will be unlocked for 24 hours.</p>
         </div>
-        <p id="sponsor-note" class="note">After visiting the sponsor link your session will be unlocked for 24 hours.</p>
-      </div>
 
-      <div id="gleam-area" class="gleam-area" style="display:none;">
-        <div id="gleam-placeholder"></div>
-        <div id="gleam-error" class="error-box" style="display:none;">
-          ⚠️ The giveaway widget couldn’t load in this browser. Please allow cookies for <b>gleam.io</b> or disable any tracker blocker. On iPhone/iPad use Safari.
+        <div id="timer-area" style="display:none;">
+          <div id="timer-bar" class="timer-bar">
+            <span>🟢</span>
+            <span id="timer-text">Access active…</span>
+          </div>
+        </div>
+
+        <div id="gleam-area" class="gleam-area" style="display:none;">
+          <div id="gleam-placeholder"></div>
+          <div id="gleam-error" class="error-box" style="display:none;">
+            <p>⚠️ The giveaway widget couldn't load in this browser. Please allow cookies for <b>gleam.io</b> or disable any tracker blocker. On iPhone/iPad use Safari.</p>
+            <button onclick="location.reload()" class="primary-btn" style="margin-top:0.75rem; font-size:0.85rem; padding:0.5rem 1rem;">↻ Refresh Page</button>
+          </div>
         </div>
       </div>
 
-      <div id="timer-area" style="display:none;">
-        <p id="timer-text"></p>
-      </div>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <p>© 2025 RewardLoop</p>
+    <footer class="site-footer">
+    <p>© 2026 RewardLoop · Honest giveaways funded by sponsored content</p>
+    <p class="footer-links">
+      <a href="terms.html">Terms &amp; Conditions</a>
+      · <a href="mailto:rewardloop.support&#64;gmail.com">Contact Us</a>
+      · <a href="https://discord.gg/QchTr8NWHv" target="_blank" rel="noopener">Join Discord</a>
+    </p>
   </footer>
-  <script src="js/data.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/giveaway.js"></script>
+
+  <script src="js/utils.js" type="module"></script>
+  <script src="js/giveaway.js" type="module"></script>
 </body>
 </html>

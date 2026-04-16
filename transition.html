@@ -4,6 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>RewardLoop — Sponsored Access</title>
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://rewardloop.github.io/transition.html" />
+  <meta property="og:title"       content="RewardLoop — Sponsored Access" />
+  <meta property="og:description" content="One quick sponsor visit unlocks your free giveaway entry for 24 hours." />
+  <meta property="og:image"       content="https://rewardloop.github.io/assets/logo.png" />
+  <meta name="twitter:card"       content="summary" />
+  <meta name="description"        content="One quick sponsor visit unlocks your free giveaway entry for 24 hours." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,35 +26,49 @@
       <img src="assets/logo.png" alt="RewardLoop" class="logo" />
       <div class="title-block">
         <h1>Sponsored Access</h1>
-        <p class="tagline">Support the giveaways by viewing a short sponsored page — unlock access for 24 hours.</p>
+        <p class="tagline">A quick sponsor visit funds the prize — takes seconds.</p>
       </div>
     </div>
   </header>
 
   <main class="container">
-    <div class="redirect-card">
-      <h2 id="t-title">Quick consent</h2>
-      <p id="t-desc">This giveaway is funded by sponsored links. By continuing you agree to view a short sponsored page which helps fund prizes.</p>
+    <div class="redirect-card fade-up">
+      <div class="redirect-icon">🎁</div>
+      <h2 id="t-title">One quick step</h2>
+      <p class="sub" id="t-desc">
+        This giveaway is funded entirely by a sponsored link.
+        Visiting it unlocks your free entry for <strong>24 hours</strong> — no purchase, no signup.
+      </p>
 
-      <label class="checkbox-label" style="display:block;margin-top:12px;">
-        <input type="checkbox" id="consentCheckbox"> I agree to view sponsored content which funds the giveaway.
+      <label class="checkbox-label" id="consentLabel" style="text-align:left; display:none;">
+        <input type="checkbox" id="consentCheckbox" />
+        I understand the giveaway is funded by a sponsored link and agree to visit it.
       </label>
 
-      <div style="margin-top:1rem;">
-        <button id="continueBtn" class="primary-btn" disabled>Continue to Sponsor</button>
-      </div>
+      <hr class="redirect-divider" id="consentDivider" style="display:none;" />
 
-      <p style="margin-top:1rem; color:var(--muted); font-size:0.9rem;">
-        After viewing the sponsor page you will be returned to the giveaway page.
+      <button id="continueBtn" class="primary-btn loading-btn" disabled style="width:100%; padding:0.75rem;">
+        <span class="btn-spinner"></span>
+        <span id="btnText">Loading giveaway…</span>
+      </button>
+
+      <p class="after-note" id="afterNote" style="visibility:hidden;">
+        After the sponsor page, you'll be automatically returned to the giveaway.
+        Your access stays active for 24 hours.
       </p>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <p>© 2025 RewardLoop</p>
+    <footer class="site-footer">
+    <p>© 2026 RewardLoop · Honest giveaways funded by sponsored content</p>
+    <p class="footer-links">
+      <a href="terms.html">Terms &amp; Conditions</a>
+      · <a href="mailto:rewardloop.support&#64;gmail.com">Contact Us</a>
+      · <a href="https://discord.gg/QchTr8NWHv" target="_blank" rel="noopener">Join Discord</a>
+    </p>
   </footer>
 
-  <script src="js/data.js"></script>
-  <script src="js/transition.js"></script>
+  <script src="js/utils.js" type="module"></script>
+  <script src="js/transition.js" type="module"></script>
 </body>
 </html>

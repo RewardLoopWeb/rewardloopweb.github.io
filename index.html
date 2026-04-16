@@ -3,7 +3,23 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RewardLoop — Giveaways</title>
+  <title>RewardLoop — Free Honest Giveaways</title>
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://rewardloop.github.io/" />
+  <meta property="og:title"       content="RewardLoop — Free Honest Giveaways" />
+  <meta property="og:description" content="Win real prizes like Amazon & Steam gift cards. 100% free to enter — funded by sponsored links, not your wallet." />
+  <meta property="og:image"       content="https://rewardloop.github.io/assets/logo.png" />
+  <meta name="twitter:card"       content="summary" />
+  <meta name="twitter:title"      content="RewardLoop — Free Honest Giveaways" />
+  <meta name="twitter:description" content="Win real prizes like Amazon & Steam gift cards. 100% free to enter — funded by sponsored links, not your wallet." />
+  <meta name="twitter:image"      content="https://rewardloop.github.io/assets/logo.png" />
+  <meta name="description"        content="Win real prizes like Amazon & Steam gift cards. 100% free to enter — funded by sponsored links, not your wallet." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -18,44 +34,133 @@
   </header>
 
   <main class="container">
-    <section class="section">
-      <h2>🎁 Active Giveaways</h2>
-      <div id="active-list" class="card-grid"></div>
-    </section>
 
-    <section class="section">
-      <h2>⏳ Upcoming Giveaways</h2>
-      <div id="upcoming-list" class="card-grid"></div>
-    </section>
+    <div class="hero-strip fade-up">
+      <div>
+        <h2>Free prizes. No tricks.</h2>
+        <p>Every giveaway is funded entirely by sponsored links — you spend a few seconds, we fund real prizes. No purchases, no hidden fees.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:0.5rem; align-items:flex-end; flex-shrink:0;">
+        <span class="hero-badge">🔄 Ad-Funded Model</span>
+        <a href="https://discord.gg/QchTr8NWHv" target="_blank" rel="noopener" class="discord-btn">💬 Join our Discord</a>
+      </div>
+    </div>
 
-    <section class="section">
-      <h2>🏁 Ended Giveaways & Winners</h2>
-      <div id="ended-list" class="card-grid"></div>
-    </section>
-
-    <section class="section how-it-works">
-      <h2>🔄 How RewardLoop Works</h2>
-      <ol>
-        <li>Click a giveaway → you’ll confirm consent to view sponsored content.</li>
-        <li>After consenting you’ll be redirected to a short sponsor link (ads). That short link must redirect back to the giveaway page.</li>
-        <li>When you arrive at the giveaway page via the short link we start a 24-hour access window for that giveaway only.</li>
-        <li>During that 24-hour window you can revisit that giveaway freely; other giveaways require their own sponsor view.</li>
-      </ol>
-      <p class="muted">We do not charge users. We post winners publicly and contact winners by email.</p>
-
-      <div id="session-info" class="session-info">
-        <p id="session-text">Checking your session…</p>
-        <button id="reset-session" class="small-btn">Reset local session (testing)</button>
+    <section class="section fade-up fade-up-1">
+      <div class="section-header">
+        <h2>🎁 Active Giveaways</h2>
+        <span class="section-badge live">Live</span>
+      </div>
+      <div id="active-list" class="card-grid">
+        <p class="empty-state">Loading giveaways…</p>
       </div>
     </section>
+
+    <section class="section fade-up fade-up-2">
+      <div class="section-header">
+        <h2>⏳ Upcoming Giveaways</h2>
+        <span class="section-badge">Soon</span>
+      </div>
+      <div id="upcoming-list" class="card-grid">
+        <p class="empty-state">Loading…</p>
+      </div>
+    </section>
+
+    <section class="section fade-up fade-up-3">
+      <div class="section-header">
+        <h2>🏁 Ended Giveaways &amp; Winners</h2>
+        <span class="section-badge">Closed</span>
+      </div>
+      <div id="ended-list" class="card-grid">
+        <p class="empty-state">No ended giveaways yet.</p>
+      </div>
+    </section>
+
+    <section class="section fade-up">
+      <div class="hiw-card">
+        <div class="hiw-top">
+          <div>
+            <h2 class="hiw-title">How RewardLoop works</h2>
+            <p class="hiw-sub">Free prizes, funded by a few seconds of your time.</p>
+          </div>
+          <span class="hero-badge" style="align-self:flex-start;">100% Free to Enter</span>
+        </div>
+
+        <div class="hiw-steps">
+          <div class="hiw-step">
+            <div class="hiw-step-emoji">🎁</div>
+            <div class="hiw-step-num">01</div>
+            <div class="hiw-step-title">Browse giveaways</div>
+            <div class="hiw-step-desc">Pick any active giveaway and click to enter.</div>
+          </div>
+          <div class="hiw-arrow">→</div>
+          <div class="hiw-step">
+            <div class="hiw-step-emoji">🔗</div>
+            <div class="hiw-step-num">02</div>
+            <div class="hiw-step-title">Visit a sponsor link</div>
+            <div class="hiw-step-desc">A short sponsored page funds the prize — once per 24 hours.</div>
+          </div>
+          <div class="hiw-arrow">→</div>
+          <div class="hiw-step">
+            <div class="hiw-step-emoji">✅</div>
+            <div class="hiw-step-num">03</div>
+            <div class="hiw-step-title">Get access</div>
+            <div class="hiw-step-desc">Land on the giveaway page with 24-hour access unlocked.</div>
+          </div>
+          <div class="hiw-arrow">→</div>
+          <div class="hiw-step">
+            <div class="hiw-step-emoji">🏆</div>
+            <div class="hiw-step-num">04</div>
+            <div class="hiw-step-title">Win real prizes</div>
+            <div class="hiw-step-desc">Winners picked randomly via Gleam, contacted by email.</div>
+          </div>
+        </div>
+
+        <div class="hiw-trust">
+          <div class="hiw-trust-item">
+            <span class="hiw-trust-icon">🚫</span>
+            <div>
+              <div class="hiw-trust-label">No purchase needed</div>
+              <div class="hiw-trust-sub">Entering is always free</div>
+            </div>
+          </div>
+          <div class="hiw-trust-item">
+            <span class="hiw-trust-icon">📢</span>
+            <div>
+              <div class="hiw-trust-label">Public winners</div>
+              <div class="hiw-trust-sub">Every result announced openly</div>
+            </div>
+          </div>
+          <div class="hiw-trust-item">
+            <span class="hiw-trust-icon">🔄</span>
+            <div>
+              <div class="hiw-trust-label">Ad-funded model</div>
+              <div class="hiw-trust-sub">Sponsors pay, you win</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="session-status-bar">
+          <div class="session-status-left">
+            <span class="session-dot" id="session-dot"></span>
+            <p id="session-text">Checking your active sessions…</p>
+          </div>
+          <button id="reset-session" class="small-btn">Clear sessions</button>
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <footer class="site-footer">
-    <p>© 2025 RewardLoop • Transparent Giveaways Funded by You</p>
+    <footer class="site-footer">
+    <p>© 2026 RewardLoop · Honest giveaways funded by sponsored content</p>
+    <p class="footer-links">
+      <a href="terms.html">Terms &amp; Conditions</a>
+      · <a href="mailto:rewardloop.support&#64;gmail.com">Contact Us</a>
+      · <a href="https://discord.gg/QchTr8NWHv" target="_blank" rel="noopener">Join Discord</a>
+    </p>
   </footer>
 
-  <!-- scripts -->
-  <script src="js/data.js"></script>
   <script src="js/utils.js" type="module"></script>
   <script src="js/main.js" type="module"></script>
 </body>

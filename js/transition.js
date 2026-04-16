@@ -1,39 +1,83 @@
-// transition.js - shows consent and redirects to the encoded short link
+// transition.js — consent screen → redirect to short sponsor link
+
+import { loadActiveGiveaways } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const params = new URLSearchParams(window.location.search);
-  const giveId = params.get("give"); // id passed from index
+  const params          = new URLSearchParams(window.location.search);
+  const giveId          = params.get("give");
   const consentCheckbox = document.getElementById("consentCheckbox");
-  const continueBtn = document.getElementById("continueBtn");
+  const consentLabel    = document.getElementById("consentLabel");
+  const consentDivider  = document.getElementById("consentDivider");
+  const continueBtn     = document.getElementById("continueBtn");
+  const btnText         = document.getElementById("btnText");
+  const afterNote       = document.getElementById("afterNote");
+  const tTitle          = document.getElementById("t-title");
+  const tDesc           = document.getElementById("t-desc");
+  const now             = new Date();
 
-  // find giveaway
-  const giveaway = (data.active || []).find(g => g.id === giveId);
-  if (!giveaway) {
-    document.getElementById("t-title").textContent = "Giveaway not found";
-    document.getElementById("t-desc").textContent = "Invalid giveaway ID.";
-    continueBtn.style.display = "none";
-    consentCheckbox.style.display = "none";
-    return;
+  async function init() {
+    // No giveaway ID in URL
+    if (!giveId) {
+      showError("Missing giveaway", "No giveaway ID was provided. <a href='index.html'>Go back home</a>.");
+      return;
+    }
+
+    // Firebase fetch
+    const all      = await loadActiveGiveaways();
+    const giveaway = (all || []).find(g => {
+      const start = g.start?.toDate?.();
+      const end   = g.end?.toDate?.();
+      return g.id === giveId && start && end && start <= now && end >= now;
+    });
+
+    // Giveaway not found or expired
+    if (!giveaway) {
+      showError("Giveaway not found", "This giveaway may have ended or the link is invalid. <a href='index.html'>Browse all giveaways →</a>");
+      return;
+    }
+
+    // Firebase loaded — reveal the consent UI
+    consentLabel.style.display   = "flex";
+    consentDivider.style.display = "block";
+    afterNote.style.visibility   = "visible";
+
+    // Button stays disabled until checkbox ticked — update label
+    btnText.textContent      = "Continue to Sponsor →";
+    continueBtn.disabled     = true;
+    continueBtn.classList.remove("loading-btn");
+
+    // Remove spinner once loaded
+    const spinner = continueBtn.querySelector(".btn-spinner");
+    if (spinner) spinner.remove();
+
+    consentCheckbox.addEventListener("change", () => {
+      continueBtn.disabled = !consentCheckbox.checked;
+    });
+
+    continueBtn.addEventListener("click", () => {
+      try {
+        const shortUrl = atob(giveaway.short);
+        sessionStorage.setItem("rewardloop_pending", giveId);
+        btnText.textContent  = "Opening sponsor page…";
+        continueBtn.disabled = true;
+        window.location.href = shortUrl;
+      } catch (e) {
+        alert("Redirect failed — the sponsor link may not be configured yet.");
+      }
+    });
   }
 
-  // enable continue only when checked
-  consentCheckbox.addEventListener("change", () => {
-    continueBtn.disabled = !consentCheckbox.checked;
-  });
+  function showError(title, descHtml) {
+    tTitle.textContent        = title;
+    tDesc.innerHTML           = descHtml;
+    continueBtn.style.display = "none";
+    consentLabel.style.display = "none";
+    consentDivider.style.display = "none";
+    afterNote.style.display   = "none";
+    // Remove spinner too
+    const spinner = continueBtn.querySelector(".btn-spinner");
+    if (spinner) spinner.remove();
+  }
 
-  continueBtn.addEventListener("click", () => {
-    try {
-      const short = atob(giveaway.short);
-      // mark pending so giveaway can grant access when redirected back
-      sessionStorage.setItem("rewardloop_pending", giveId);
-      // open sponsor short link in new tab (user gesture)
-      window.open(short, "_self", "noopener");
-      // Optionally navigate the user to a friendly "waiting" page in the current tab.
-      // For now, keep them on transition page and instruct them to return after sponsor completes.
-      continueBtn.textContent = "Sponsor opened — return after viewing";
-      continueBtn.disabled = true;
-    } catch (e) {
-      alert("Redirect failed (invalid short link).");
-    }
-  });
+  init();
 });

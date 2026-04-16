@@ -1,117 +1,120 @@
-// main.js - renders homepage lists and handles click -> transition
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-  import { 
-    getFirestore,
-    collection,
-    getDocs,
-    doc,
-    getDoc
-  } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+// main.js — renders homepage lists, handles click → transition or direct giveaway
+
+import { loadActiveGiveaways, clearAllAccess, hasValidAccess } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const firebaseConfig = {
-    apiKey: "AIzaSyCAh_enaOplvVLLrPwWI2PmBe0t_nEWLQQ",
-    authDomain: "giveawaysloop-c2d7b.firebaseapp.com",
-    projectId: "giveawaysloop-c2d7b",
-    storageBucket: "giveawaysloop-c2d7b.firebasestorage.app",
-    messagingSenderId: "691273086302",
-    appId: "1:691273086302:web:e00d77930eee12e4934bcf",
-    measurementId: "G-P87DXJB5YH"
-  };
-
-  // --- INITIALIZE ---
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  console.log("Firebase initialized!");
-  console.log("Firestore connected:", db);
-
-  // --- SMALL TEST: READ A COLLECTION ---
-  async function testFirestore() {
-    try {
-      const snap = await getDocs(collection(db, "test"));
-      snap.forEach(doc => console.log(doc.id, "=>", doc.data()));
-    } 
-    catch (err) {
-      console.error("Firestore test error:", err);
-    }
-  }
-
-  testFirestore();
-  async function loadActiveGiveaways() {
-  const ref = collection(db, "giveawaysnoaccess");
-  const snap = await getDocs(ref);
-
-  const giveaways = [];
-
-  snap.forEach(doc => {
-    giveaways.push({
-      id: doc.id,
-      ...doc.data()
-    });
-  });
-  return giveaways;
-}
-  const activeList = document.getElementById("active-list");
+  const activeList   = document.getElementById("active-list");
   const upcomingList = document.getElementById("upcoming-list");
-  const endedList = document.getElementById("ended-list");
-  const sessionText = document.getElementById("session-text");
-  const resetBtn = document.getElementById("reset-session");
-  const data = {};
-  const client_date = new Date();
-  async function loadActive() {
-    let array = [];
-    array = await loadActiveGiveaways();
-    // Render active giveaways
-    (array || []).forEach(g => {
-    const card = document.createElement("div");
-    card.className = "giveaway-card";
-    card.innerHTML = `
-      <img src="assets/${g.image}" alt="${escapeHtml(g.title)}" />
-      <h3>${escapeHtml(g.title)}</h3>
-      <p>Win a genuine ${escapeHtml(g.title).replace("Giveaway", "").trim()}. Enter daily — support the prize pool by viewing sponsored content.</p>
-      <div style="margin-top:0.8rem">
-        <button class="primary-btn enter-btn" data-id="${g.id}">Join Giveaway</button>
-      </div>
-    `
-    if (g.end.toDate() < client_date) endedList.appendChild(card);
-    else if (g.end.toDate() > client_date && g.start.toDate() < client_date) activeList.appendChild(card);
-    else if (g.start.toDate() > client_date) upcomingList.appendChild(card);
-  });
-  }
-  loadActive();
+  const endedList    = document.getElementById("ended-list");
+  const resetBtn     = document.getElementById("reset-session");
+  const now          = new Date();
 
-  function escapeHtml(str) {
-    return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-  }
+  async function loadAndRender() {
+    const giveaways = await loadActiveGiveaways();
 
-  // attach enter handlers
-  document.querySelectorAll(".enter-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const id = btn.dataset.id;
-      console.log(id)
-      sessionStorage.setItem("rewardloop_targetGiveaway", id);
-      // go to transition/consent page with giveaway id
-      window.location.href = `transition.html?give=${encodeURIComponent(id)}`;
+    const active   = [];
+    const upcoming = [];
+    const ended    = [];
+
+    (giveaways || []).forEach(g => {
+      const start = g.start?.toDate?.() ?? null;
+      const end   = g.end?.toDate?.()   ?? null;
+
+      if (end && end < now)                          ended.push(g);
+      else if (start && end && start <= now && end >= now) active.push(g);
+      else if (start && start > now)                 upcoming.push(g);
     });
-  });
 
-  // session info & reset
-  resetBtn.addEventListener("click", () => {
-    clearAllAccess();
-    updateSessionText();
-    alert("Local access keys cleared (testing).");
-  });
+    renderList(activeList,   active,   "active");
+    renderList(upcomingList, upcoming, "upcoming");
+    renderList(endedList,    ended,    "ended");
+
+    document.querySelectorAll(".enter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.id;
+
+        // FIX: if user already has a valid 24h session, skip transition entirely
+        if (hasValidAccess(id)) {
+          window.location.href = `giveaway.html?id=${encodeURIComponent(id)}`;
+        } else {
+          sessionStorage.setItem("rewardloop_targetGiveaway", id);
+          window.location.href = `transition.html?give=${encodeURIComponent(id)}`;
+        }
+      });
+    });
+  }
+
+  function renderList(container, items, type) {
+    container.innerHTML = "";
+
+    if (!items.length) {
+      const msg = {
+        active:   "No active giveaways right now — check back soon!",
+        upcoming: "No upcoming giveaways announced yet.",
+        ended:    "No ended giveaways yet."
+      }[type] ?? "None.";
+      container.innerHTML = `<p class="empty-state">${msg}</p>`;
+      return;
+    }
+
+    items.forEach(g => {
+      const card = document.createElement("div");
+      card.className = "giveaway-card" + (type === "ended" ? " ended-card" : "");
+
+      const endDate   = g.end?.toDate?.();
+      const startDate = g.start?.toDate?.();
+      let metaText = "";
+      if (type === "active"   && endDate)   metaText = `Ends ${formatDate(endDate)}`;
+      if (type === "upcoming" && startDate) metaText = `Starts ${formatDate(startDate)}`;
+      if (type === "ended"    && endDate)   metaText = `Ended ${formatDate(endDate)}`;
+
+      // Show "Rejoin" label if user already has access for this giveaway
+      const hasAccess  = type === "active" && hasValidAccess(g.id);
+      const btnLabel   = hasAccess ? "Rejoin Giveaway ✓" : "Join Giveaway";
+
+      card.innerHTML = `
+        <img src="assets/${escapeHtml(g.image || "")}" alt="${escapeHtml(g.title)}" loading="lazy" />
+        <h3>${escapeHtml(g.title)}</h3>
+        <p>Win a genuine ${escapeHtml(g.title.replace(/giveaway/i, "").trim())}. Enter daily — support the prize pool by viewing sponsored content.</p>
+        ${metaText ? `<p class="card-meta">${metaText}</p>` : ""}
+        ${type === "active" ? `<div style="margin-top:0.5rem"><button class="primary-btn enter-btn${hasAccess ? " btn-rejoin" : ""}" data-id="${escapeHtml(g.id)}">${btnLabel}</button></div>` : ""}
+      `;
+
+      container.appendChild(card);
+    });
+  }
 
   function updateSessionText() {
     const keys = Object.keys(localStorage).filter(k => k.startsWith("rewardloop_access_"));
+    const dot  = document.getElementById("session-dot");
+    const text = document.getElementById("session-text");
     if (keys.length === 0) {
-      sessionText.textContent = "You do not have any active sponsor sessions. Each giveaway requires a sponsor visit once every 24 hours.";
+      dot?.classList.remove("active");
+      if (text) text.textContent = "No active sessions — visit a sponsor link to unlock a giveaway.";
     } else {
-      sessionText.textContent = `You have ${keys.length} active sponsor session(s).`;
+      dot?.classList.add("active");
+      if (text) text.textContent = `${keys.length} active session${keys.length > 1 ? "s" : ""} — you can re-enter unlocked giveaways freely.`;
     }
   }
 
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function formatDate(date) {
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  }
+
+  resetBtn?.addEventListener("click", () => {
+    clearAllAccess();
+    updateSessionText();
+    // Re-render to update button labels
+    loadAndRender();
+    alert("Local access sessions cleared.");
+  });
+
+  loadAndRender();
   updateSessionText();
 });
-
