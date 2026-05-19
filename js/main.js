@@ -78,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <p>Win a genuine ${escapeHtml(g.title.replace(/giveaway/i, "").trim())}. Enter daily — support the prize pool by viewing sponsored content.</p>
         ${metaText ? `<p class="card-meta">${metaText}</p>` : ""}
         ${type === "active" ? `<div style="margin-top:0.5rem"><button class="primary-btn enter-btn${hasAccess ? " btn-rejoin" : ""}" data-id="${escapeHtml(g.id)}">${btnLabel}</button></div>` : ""}
+        ${type === "ended" ? `<div style="margin-top:0.5rem"><a href="giveaway.html?id=${escapeHtml(g.id)}&ended=1" class="primary-btn btn-winner">🏆 View Winner</a></div>` : ""}
       `;
 
       container.appendChild(card);

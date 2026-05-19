@@ -1,4 +1,4 @@
-// giveaway.js — single giveaway page: gating, sponsor flow, Gleam widget, 24h timer
+// giveaway.js — single giveaway page: gating, sponsor flow, Gleam widget, 24h timer, ended view
 
 import { loadActiveGiveaways, grantAccess, hasValidAccess, clearAccess, getAccessRecord_public } from "./utils.js";
 
@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const id     = params.get("id");
   const joined = params.get("joined");
+  const ended  = params.get("ended"); // ended=1 means view-only, no ads
 
   const titleEl        = document.getElementById("giveaway-title");
   const subEl          = document.getElementById("giveaway-sub");
@@ -23,6 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const timerText      = document.getElementById("timer-text");
   const skeleton       = document.getElementById("loading-skeleton");
   const content        = document.getElementById("giveaway-content");
+  const endedBanner    = document.getElementById("ended-banner");
+  const winnerName     = document.getElementById("winner-name");
 
   async function init() {
     if (!id) { showError("No giveaway ID provided."); return; }
@@ -30,45 +33,61 @@ document.addEventListener("DOMContentLoaded", () => {
     const all      = await loadActiveGiveaways();
     const giveaway = all.find(g => g.id === id);
 
-    if (!giveaway) { showError("Giveaway not found or no longer active."); return; }
+    if (!giveaway) { showError("Giveaway not found."); return; }
 
     // Reveal content, hide skeleton
     skeleton.style.display = "none";
     content.style.display  = "block";
 
     titleEl.textContent = giveaway.title;
-    const endDate = giveaway.end?.toDate?.();
-    subEl.textContent  = endDate ? `Ends ${endDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}` : "";
-    imgEl.src          = "assets/" + (giveaway.image || "");
-    imgEl.alt          = giveaway.title;
-    descEl.textContent = `Win a genuine ${giveaway.title.replace(/giveaway/i, "").trim()}. Enter daily — support the prize pool by viewing sponsored content.`;
+    imgEl.src           = "assets/" + (giveaway.image || "");
+    imgEl.alt           = giveaway.title;
 
-    // FIX: arrived via short link redirect (joined=1)
-    if (joined === "1") {
-      sessionStorage.removeItem("rewardloop_pending");
-      grantAccess(id);
-      // Strip joined=1 from URL immediately so refreshing won't re-grant access
-      history.replaceState(null, "", `giveaway.html?id=${encodeURIComponent(id)}`);
-      showGleam(giveaway);
+    const endDate = giveaway.end?.toDate?.();
+
+    // ── ENDED VIEW MODE (no ads, no session check) ────────────────────────────
+    if (ended === "1") {
+      subEl.textContent = endDate ? `Ended ${endDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}` : "Ended";
+      descEl.textContent = giveaway.description || "";
+
+      // Show ended banner with winner if available in Firebase
+      endedBanner.style.display = "block";
+      if (giveaway.winner) {
+        winnerName.textContent = `🏆 Winner: ${giveaway.winner}`;
+      } else {
+        winnerName.textContent = "Winner will be announced soon.";
+      }
+
+      // Show Gleam widget for results — no timer, no sponsor
+      showGleam(giveaway, false);
       return;
     }
 
-    // Arrived back via sessionStorage pending flag (same tab)
+    // ── ACTIVE GIVEAWAY FLOW ──────────────────────────────────────────────────
+    subEl.textContent  = endDate ? `Ends ${endDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}` : "";
+    descEl.textContent = `Win a genuine ${giveaway.title.replace(/giveaway/i, "").trim()}. Enter daily — support the prize pool by viewing sponsored content.`;
+
+    if (joined === "1") {
+      sessionStorage.removeItem("rewardloop_pending");
+      grantAccess(id);
+      history.replaceState(null, "", `giveaway.html?id=${encodeURIComponent(id)}`);
+      showGleam(giveaway, true);
+      return;
+    }
+
     if (sessionStorage.getItem("rewardloop_pending") === id) {
       sessionStorage.removeItem("rewardloop_pending");
       grantAccess(id);
       history.replaceState(null, "", `giveaway.html?id=${encodeURIComponent(id)}`);
-      showGleam(giveaway);
+      showGleam(giveaway, true);
       return;
     }
 
-    // Already has valid 24h access
     if (hasValidAccess(id)) {
-      showGleam(giveaway);
+      showGleam(giveaway, true);
       return;
     }
 
-    // No access — send to transition
     window.location.href = `transition.html?give=${encodeURIComponent(id)}`;
   }
 
@@ -78,11 +97,12 @@ document.addEventListener("DOMContentLoaded", () => {
     continueBtn.disabled = !checked;
   });
 
-  function showGleam(giveaway) {
+  // showTimer param controls whether to start the 24h countdown
+  function showGleam(giveaway, showTimer) {
     sponsorArea.style.display = "none";
     gleamArea.style.display   = "block";
     gleamError.style.display  = "none";
-    startTimer(id);
+    if (showTimer) startTimer(id);
 
     try {
       const gleamUrl    = atob(giveaway.link);
@@ -133,10 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function onWidgetFailed() { gleamHolder.innerHTML = ""; gleamError.style.display = "block"; }
 
   function detectWidget(container, onSuccess, onFail) {
-    // Minimum height a real loaded Gleam widget reaches (px)
-    // A blocked/cookie-denied widget stays at a very small stub height
     const MIN_SUCCESS_HEIGHT = 300;
-    // How long to wait before giving up entirely (ms)
     const TIMEOUT_MS = 8000;
     let handled = false;
 
@@ -148,21 +165,16 @@ document.addEventListener("DOMContentLoaded", () => {
       success ? onSuccess() : onFail();
     }
 
-    // Wait for the iframe to appear in the DOM first
     const domWatcher = new MutationObserver(() => {
       const iframe = document.getElementsByClassName("e-embed-frame")[0];
       if (!iframe) return;
       domWatcher.disconnect();
 
-      // Now watch the iframe's style attribute for height changes
       const observer = new MutationObserver(() => {
         const height = parseInt(iframe.style.height, 10);
         if (!height) return;
-        // A real widget grows tall; a blocked/failed one stays small
         if (height >= MIN_SUCCESS_HEIGHT) resolve(true);
         else if (height > 0 && height < MIN_SUCCESS_HEIGHT) {
-          // Give it a little more time before calling failure —
-          // widget might still be loading
           setTimeout(() => {
             const h = parseInt(iframe.style.height, 10);
             resolve(h >= MIN_SUCCESS_HEIGHT);
@@ -171,13 +183,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       observer.observe(iframe, { attributes: true, attributeFilter: ["style"] });
 
-      // Hard timeout — if nothing meaningful happens, fail gracefully
       const timer = setTimeout(() => resolve(false), TIMEOUT_MS);
     });
 
     domWatcher.observe(container, { childList: true, subtree: true });
 
-    // Also set an outer timeout in case iframe never appears at all
     setTimeout(() => {
       domWatcher.disconnect();
       if (!handled) resolve(false);
@@ -192,6 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sponsorArea.style.display = "none";
     gleamArea.style.display   = "none";
     timerArea.style.display   = "none";
+    endedBanner.style.display = "none";
   }
 
   init();
