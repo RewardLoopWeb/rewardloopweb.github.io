@@ -7,15 +7,15 @@
 
   <!-- Open Graph -->
   <meta property="og:type"        content="website" />
-  <meta property="og:url"         content="https://rewardloopweb.github.io/giveaway.html" />
+  <meta property="og:url"         content="https://rewardloop.github.io/giveaway.html" />
   <meta property="og:title"       content="RewardLoop — Enter the Giveaway" />
   <meta property="og:description" content="Enter for free. Funded by a short sponsored link — no purchase, no signup required." />
-  <meta property="og:image"       content="https://rewardloopweb.github.io/assets/logo.png" />
+  <meta property="og:image"       content="https://rewardloop.github.io/assets/logo.png" />
   <meta name="twitter:card"       content="summary" />
   <meta name="description"        content="Enter for free. Funded by a short sponsored link — no purchase, no signup required." />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
 
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -45,6 +45,13 @@
 
       <!-- Real content -->
       <div id="giveaway-content" style="display:none;">
+
+        <!-- Ended banner — only shown in ended=1 mode -->
+        <div id="ended-banner" class="ended-banner" style="display:none;">
+          <span class="ended-badge">🏁 Giveaway Ended</span>
+          <p id="winner-name" class="ended-winner"></p>
+        </div>
+
         <img id="giveaway-image" class="giveaway-image" src="" alt="Prize image" />
         <p id="giveaway-desc" class="desc" style="text-align:center; margin-bottom:0.5rem;"></p>
 
