@@ -578,3 +578,41 @@ body {
   background: #4752c4;
   transform: translateY(-1px);
 }
+
+/* ── ENDED BANNER ── */
+.ended-banner {
+  background: #f0fdf4;
+  border: 1.5px solid #bbf7d0;
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem;
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+.ended-badge {
+  display: inline-block;
+  background: #dcfce7;
+  color: #16a34a;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 99px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+.ended-winner {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+/* ── VIEW WINNER BUTTON ── */
+.btn-winner {
+  background: #16a34a;
+  box-shadow: 0 2px 8px rgba(22,163,74,0.18);
+}
+.btn-winner:hover {
+  background: #15803d;
+  box-shadow: 0 4px 14px rgba(22,163,74,0.28);
+}
