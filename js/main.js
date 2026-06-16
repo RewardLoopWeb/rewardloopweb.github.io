@@ -17,12 +17,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const ended    = [];
 
     (giveaways || []).forEach(g => {
+      // Exclusive giveaways are hidden from homepage — accessible via direct link only
+      if (g.exclusive === true || g.exclusive === "true") return;
+
       const start = g.start?.toDate?.() ?? null;
       const end   = g.end?.toDate?.()   ?? null;
 
-      if (end && end < now)                          ended.push(g);
+      if (end && end < now)                                ended.push(g);
       else if (start && end && start <= now && end >= now) active.push(g);
-      else if (start && start > now)                 upcoming.push(g);
+      else if (start && start > now)                       upcoming.push(g);
     });
 
     renderList(activeList,   active,   "active");
